@@ -17,19 +17,15 @@ export const metadata: Metadata = {
   description: "Agyeman Enterprises LMS",
 };
 
-import { headers } from "next/headers";
 import { TenantProvider } from "../tenants/provider";
+import { getTenantFromHeaders } from "../tenants/utils";
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const h = await headers();
-  const t = h.get("x-tenant") ?? "default";
-  const isTenantId = (v: string): v is import("../tenants/config").TenantId =>
-    v === "default" || v === "tls" || v === "spm" || v === "sva";
-  const tenant = isTenantId(t) ? t : "default";
+  const tenant = await getTenantFromHeaders();
   return (
     <html lang="en" data-tenant={tenant}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
