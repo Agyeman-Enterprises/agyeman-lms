@@ -4,7 +4,7 @@ import { HOST_TO_TENANT } from "./src/tenants/config";
 
 export function middleware(req: NextRequest) {
   const host = (req.headers.get("host") || "").toLowerCase();
-  const tenant = (HOST_TO_TENANT as any)[host] || "default";
+  const tenant = HOST_TO_TENANT[host] || "default";
   const res = NextResponse.next();
   res.headers.set("x-tenant", tenant);
   return res;
